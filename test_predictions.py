@@ -41,7 +41,7 @@ def measure_score(file_name, points_arr, r_light1, r_light2):
         r_light = r_light.resize((points[3] - points[1], points[2] - points[0]))
         
         r_light = np.asarray(r_light).reshape(-1)
-        detected = img[points[0]:points[2],points[1]:points[3]:].reshape(-1)
+        detected = img[points[0]:points[2],points[1]:points[3],:].reshape(-1)
         score += np.dot(r_light, detected)
     
     return score / len(points_arr)
@@ -87,12 +87,11 @@ def measure_model_performance(file_names, preds, r_light1, r_light2):
 if __name__ == '__main__':
     file_names = sorted(os.listdir(DATA_PATH)) 
     file_names = [f for f in file_names if '.jpg' in f] 
-    with open(os.path.join(PREDS_PATH, 'preds.json')) as fp:
+    with open(os.path.join(PREDS_PATH, 'preds_th0.87.json')) as fp:
         preds = json.load(fp)
     r_light1 = Image.open('red_light_single.jpg')
     r_light2 = Image.open('red_light_double.jpg')
 
-    # file_names = ['RL-011.jpg']
     detection, match, overlap = measure_model_performance(file_names, preds, r_light1, r_light2)
     visualize_boxes(file_names, preds)
 
