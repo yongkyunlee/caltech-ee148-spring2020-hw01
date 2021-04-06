@@ -85,7 +85,7 @@ def measure_model_performance(file_names, preds, r_light1, r_light2):
     return n_detections / len(file_names), score / len(file_names), overlap_ratio / len(file_names)
 
 if __name__ == '__main__':
-    preds_name = 'preds_th0.9_height_processed.json'
+    preds_name = 'preds.json'
 
     file_names = sorted(os.listdir(DATA_PATH)) 
     file_names = [f for f in file_names if '.jpg' in f] 
@@ -93,6 +93,8 @@ if __name__ == '__main__':
         preds = json.load(fp)
     r_light1 = Image.open('red_light_single.jpg')
     r_light2 = Image.open('red_light_double.jpg')
+    print(f'single red light size (w, h): ({r_light1.width}, {r_light1.height})')
+    print(f'double red light size (w, h): ({r_light2.width}, {r_light2.height})')
 
     detection, match, overlap = measure_model_performance(file_names, preds, r_light1, r_light2)
 

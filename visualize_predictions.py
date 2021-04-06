@@ -22,7 +22,7 @@ def visualize_boxes(file_names, preds):
         img.save(os.path.join(OUTPUT_PATH, file_name), "JPEG")
 
 if __name__ == '__main__':
-    preds_name = 'preds_th0.9_height_processed.json'
+    preds_name = 'preds.json'
 
     file_names = sorted(os.listdir(DATA_PATH)) 
     file_names = [f for f in file_names if '.jpg' in f] 

@@ -183,10 +183,8 @@ def detect_red_light(I, r_light1, r_light2, threshold):
     return bounding_boxes
 
 if __name__ == '__main__':
-    # get sorted list of files: 
+    # get sorted list of files and remove any non-JPEG files: 
     file_names = sorted(os.listdir(DATA_PATH)) 
-
-    # remove any non-JPEG files: 
     file_names = [f for f in file_names if '.jpg' in f]
 
     # load the red_light_single and red_light_double images
@@ -195,19 +193,18 @@ if __name__ == '__main__':
     print(f'r_light_single size: ({r_light_single.height}, {r_light_single.width})')
 
     preds = {}
-    # file_names = ['RL-011.jpg']
     for i in tqdm(range(len(file_names))):
-        # read image using PIL:
+        # read image using PIL and convert to numpy array:
         I = Image.open(os.path.join(DATA_PATH,file_names[i]))
-        
-        # convert to numpy array:
         I = np.asarray(I)
+
+        # preds[file_names[i]] = detect_red_light_single_fixed_size(I, r_light_single, 0.9)
         # preds[file_names[i]] = detect_red_light_single_var_size(I, r_light_single, 0.9)
-        preds[file_names[i]] = detect_red_light_double_var_size(I, r_light_single, r_light_double, 0.9)
-        # preds[file_names[i]] = detect_red_light(I, r_light_single, r_light_double, 0.9)
+        # preds[file_names[i]] = detect_red_light_double_var_size(I, r_light_single, r_light_double, 0.9)
+        preds[file_names[i]] = detect_red_light(I, r_light_single, r_light_double, 0.9)
 
     # save preds (overwrites any previous predictions!)
-    with open(os.path.join(PREDS_PATH,'preds_th0.9_double_var.json'),'w') as f:
+    with open(os.path.join(PREDS_PATH,'preds_raw.json'),'w') as f:
         json.dump(preds,f)
     
     preds_processed = {}
@@ -221,6 +218,6 @@ if __name__ == '__main__':
         preds_processed[file_name] = process_preds.process_overlap(I, preds[file_name], r_light_single, r_light_double)
 
     # save preds (overwrites any previous predictions!)
-    with open(os.path.join(PREDS_PATH,'preds_th0.9_double_var_processed.json'),'w') as f:
+    with open(os.path.join(PREDS_PATH,'preds.json'),'w') as f:
         json.dump(preds,f)
     
