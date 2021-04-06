@@ -10,17 +10,6 @@ PREDS_PATH = './data/hw01_preds'
 OUTPUT_PATH = './data/output'
 os.makedirs(OUTPUT_PATH, exist_ok=True) # create directory if needed 
 
-def visualize_boxes(file_names, preds):
-    """ Visualize the bounding boxes to the source images """
-    for file_name in tqdm(file_names):
-        img = Image.open(os.path.join(DATA_PATH, file_name))
-        draw = ImageDraw.Draw(img)
-        points_arr = preds[file_name]
-        for points in points_arr:
-            y0, x0, y1, x1 = points
-            draw.rectangle([x0, y0, x1, y1], outline='red', width=2)
-        img.save(os.path.join(OUTPUT_PATH, file_name), "JPEG")
-
 def measure_score(file_name, points_arr, r_light1, r_light2):
     img = Image.open(os.path.join(DATA_PATH, file_name))
     img = np.array(img)
